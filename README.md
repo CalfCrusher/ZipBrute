@@ -1,3 +1,3 @@
 # ZipBrute
 
-Bruteforce tool for Zip files made with Python 3 
+Multi-Threaded ZIP files bruteforce tool made with Python 3 
