@@ -1,16 +1,28 @@
+# Multi-Threaded ZIP files bruteforce tool
+# calfcrusher@inventati.org
+# Usage: ./ZipBrute.py -f file.zip -d wordlist.txt
+
 import optparse
 import threading
 import zipfile
 import time
 import pyfiglet
+import os
+import psutil
 
 
-def extractzip(filezipobj, password):
+def extractzip(zipfilepath, password):
     """Extract zip file"""
 
     try:
-        filezipobj.extractall(pwd=password)
-        print('[+] Password Found ' + password + '\n')
+        with zipfile.ZipFile(zipfilepath) as file:
+            file.extractall(pwd=str.encode(password))
+            print("[+] PASSWORD FOUND -> " + password)
+            print("[+] Files extracted in current directory")
+            # Terminate process pid to kill all threads
+            current_system_pid = os.getpid()
+            terminator = psutil.Process(current_system_pid)
+            terminator.terminate()
     except BaseException:
         pass
 
@@ -33,22 +45,19 @@ def main():
         print(parser.usage)
         exit(0)
     else:
-        filezip = options.filezip
+        pathzip = options.filezip
         wordlist = options.wordlist
 
-    filezipobj = zipfile.ZipFile(filezip, 'r')
-    wlist = open(wordlist)
-
-    for line in wlist.readlines():
-        password = line.strip('\n')
-        t = threading.Thread(target=extractzip, args=(filezipobj, password))
-        t.start()
-
-    wlist.close()
+    if zipfile.is_zipfile(pathzip):
+        print('running...')
+        with open(wordlist) as wlist:
+            for line in wlist.readlines():
+                password = line.strip('\n')
+                t = threading.Thread(target=extractzip, args=(pathzip, password))
+                t.start()
 
 
 if __name__ == '__main__':
     start = time.time()
     main()
-
-print('It took {0:0.1f} seconds'.format(time.time() - start))
+    print('It took {0:0.1f} seconds'.format(time.time() - start))
