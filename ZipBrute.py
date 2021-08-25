@@ -57,7 +57,8 @@ def main():
                 t = threading.Thread(target=extractzip, args=(pathzip, password))
                 t.start()
 
-
+    print("Password not found"
+    
 if __name__ == '__main__':
     start = time.time()
     main()
