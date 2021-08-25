@@ -19,6 +19,7 @@ def extractzip(zipfilepath, password):
             file.extractall(pwd=str.encode(password))
             print("[+] PASSWORD FOUND -> " + password)
             print("[+] Files extracted in current directory")
+            print('It took {0:0.1f} seconds'.format(time.time() - start))
             # Terminate process pid to kill all threads
             current_system_pid = os.getpid()
             terminator = psutil.Process(current_system_pid)
@@ -60,4 +61,3 @@ def main():
 if __name__ == '__main__':
     start = time.time()
     main()
-    print('It took {0:0.1f} seconds'.format(time.time() - start))
