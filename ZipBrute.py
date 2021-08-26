@@ -5,13 +5,12 @@
 import optparse
 import threading
 import zipfile
-import time
 import pyfiglet
 import os
 import psutil
 
 
-def extractzip(zipfilepath, password, startedtime):
+def extractzip(zipfilepath, password):
     """Extract zip file"""
 
     try:
@@ -19,7 +18,6 @@ def extractzip(zipfilepath, password, startedtime):
             file.extractall(pwd=str.encode(password))
             print("[+] PASSWORD FOUND -> " + password)
             print("[+] Files extracted in current directory")
-            print('It took {0:0.1f} seconds'.format(time.time() - startedtime))
             # Terminate process pid to kill all threads
             current_system_pid = os.getpid()
             terminator = psutil.Process(current_system_pid)
@@ -35,8 +33,6 @@ def main():
     print(ascii_banner)
     print("calfcrusher@inventati.org | For educational use only.")
     print("*****************************************************\n")
-
-    start = time.time()
 
     parser = optparse.OptionParser("./ZipBrute.py -f <zipfile> -d <wordlist>")
     parser.add_option('-f', dest='filezip', type='string', help='specify zip file')
@@ -56,10 +52,11 @@ def main():
         with open(wordlist) as wlist:
             for line in wlist.readlines():
                 password = line.strip('\n')
-                t = threading.Thread(target=extractzip, args=(pathzip, password, start))
+                t = threading.Thread(target=extractzip, args=(pathzip, password))
                 t.start()
 
     print("Password not found")
 
-    if __name__ == '__main__':
-        main()
+
+if __name__ == '__main__':
+    main()
