@@ -7,8 +7,6 @@ import crypt
 import sys
 import time
 import pyfiglet
-import os
-import psutil
 
 
 def crackpass(list, hashstring, salted):
