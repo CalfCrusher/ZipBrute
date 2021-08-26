@@ -62,4 +62,5 @@ def main():
 
 if __name__ == '__main__':
     main()
-    print("No valid password found!")
+
+print("No valid password found!")
